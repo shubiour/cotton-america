@@ -35,7 +35,7 @@ const BOTTLE = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stro
 
 function thumbHTML(p) {
   if (!p.photo) return `<div class="thumb ph" aria-hidden="true">${BOTTLE}</div>`;
-  return `<button class="thumb" data-photo="${esc(p.photo)}" data-name="${esc(p.name)}" aria-label="View photo of ${esc(p.name)}">
+  return `<button class="thumb" data-photo="${esc(p.photo)}" data-pid="${p.id}" aria-label="View photo of ${esc(p.name)}">
     <img src="${esc(p.photo)}" alt="" loading="lazy" decoding="async"
       onerror="this.parentNode.classList.add('ph');this.parentNode.disabled=true;this.outerHTML=BOTTLE_SVG">
   </button>`;
@@ -70,16 +70,18 @@ export function renderList() {
     $("#list").innerHTML = `<div class="empty">No products match “${esc(state.filters.query)}”. Try a shorter word, like the brand name.</div>`;
     return;
   }
-  $("#list").classList.toggle("no-photos", !state.products.some((p) => p.photo));
   $("#list").innerHTML = shown.map(rowHTML).join("");
 }
 
 // Large photo view
-export function openPhoto(src, name) {
+export function openPhoto(id) {
+  const p = findProduct(id);
+  if (!p) return;
   const d = $("#photoView");
-  $("#photoImg").src = src;
-  $("#photoImg").alt = name;
-  $("#photoName").textContent = name;
+  $("#photoImg").src = p.photo;
+  $("#photoImg").alt = p.name;
+  $("#photoName").textContent = p.name;
+  $("#photoMeta").innerHTML = (p.price != null ? `<span class="price">${money(p.price)}</span>` : "") + stockLabel(p);
   d.showModal();
 }
 

@@ -27,7 +27,7 @@ document.addEventListener("click", (e) => {
   const id = b.dataset.id;
   const q = state.cart[id] || 0;
 
-  if (b.dataset.photo) openPhoto(b.dataset.photo, b.dataset.name);
+  if (b.dataset.photo) openPhoto(b.dataset.pid);
   else if (b.id === "photoClose") $("#photoView").close();
   else if (b.dataset.act === "add") setQty(id, 1);
   else if (b.dataset.act === "inc") setQty(id, q + 1);
