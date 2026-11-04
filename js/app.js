@@ -4,6 +4,7 @@ import { state, setProducts } from "./state.js";
 import { fetchProducts } from "./api.js";
 import { renderList, refreshRow, showLoadError, goToPage } from "./products.js";
 import { setQty, updateBar } from "./cart.js";
+import { initTheme } from "./theme.js";
 import { openSheet, closeSheet, renderSheet, sendOrder, isOpen } from "./checkout.js";
 
 async function load() {
@@ -67,4 +68,5 @@ $("#q").addEventListener("input", (e) => {
   timer = setTimeout(() => { state.filters.query = e.target.value; state.page = 1; renderList(); }, 120);
 });
 
+initTheme();
 load();
