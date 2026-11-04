@@ -2,7 +2,7 @@
 import { $ } from "./utils.js";
 import { state, setProducts } from "./state.js";
 import { fetchProducts } from "./api.js";
-import { renderList, refreshRow, showLoadError, goToPage } from "./products.js";
+import { renderList, refreshRow, showLoadError, goToPage, openPhoto } from "./products.js";
 import { setQty, updateBar } from "./cart.js";
 import { initTheme } from "./theme.js";
 import { openSheet, closeSheet, renderSheet, sendOrder, isOpen } from "./checkout.js";
@@ -27,7 +27,9 @@ document.addEventListener("click", (e) => {
   const id = b.dataset.id;
   const q = state.cart[id] || 0;
 
-  if (b.dataset.act === "add") setQty(id, 1);
+  if (b.dataset.photo) openPhoto(b.dataset.photo, b.dataset.name);
+  else if (b.id === "photoClose") $("#photoView").close();
+  else if (b.dataset.act === "add") setQty(id, 1);
   else if (b.dataset.act === "inc") setQty(id, q + 1);
   else if (b.dataset.act === "dec") setQty(id, q - 1);
   else if (b.dataset.page) goToPage(Number(b.dataset.page));
@@ -60,6 +62,8 @@ document.addEventListener("cart:change", (e) => {
 });
 
 $("#sheetBg").addEventListener("click", closeSheet);
+// Tap outside the photo to close it
+$("#photoView").addEventListener("click", (e) => { if (e.target.id === "photoView") e.target.close(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheet(); });
 
 let timer;

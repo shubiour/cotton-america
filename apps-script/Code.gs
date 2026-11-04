@@ -12,6 +12,11 @@ const CACHE_SECONDS = 60;          // how long the product list is cached
 const STATUSES_NOT_COUNTED = ['Draft'];
 // Items that are not real perfumes
 const HIDDEN_ITEMS = ['DUE BILL ON LAST MEMO'];
+// Product photo column (first header found is used, case doesn't matter)
+const PHOTO_COLUMNS = ['Photo', 'Phot', 'Image', 'Picture'];
+// Only needed if the photo cells hold AppSheet file paths like "Products_Images/P0001.Photo.jpg".
+// Put your AppSheet app name here (from the app URL, e.g. 'CottonAmerica-123456').
+const APPSHEET_APP_NAME = '';
 // ------------------------------
 
 function doGet(e) {
@@ -57,6 +62,8 @@ function getProducts_() {
 
     const item = { id: id, name: name, stock: Math.max(stock, 0) };
     if (SHOW_PRICES) item.price = Number(p['Selling Rate']) || null;
+    const photo = photoUrl_(pick_(p, PHOTO_COLUMNS));
+    if (photo) item.photo = photo;
     // NOTE: Buying Rate, Barcode, Description are never sent to customers
     out.push(item);
   });
@@ -76,6 +83,34 @@ function readTable_(ss, sheetName) {
     headers.forEach((h, i) => o[h] = row[i]);
     return o;
   });
+}
+
+// Value of the first matching column (case-insensitive header match)
+function pick_(row, names) {
+  const keys = Object.keys(row);
+  for (const n of names) {
+    const k = keys.find(k => k.toLowerCase() === n.toLowerCase());
+    if (k && row[k] !== '' && row[k] != null) return row[k];
+  }
+  return '';
+}
+
+// Turns a photo cell into an image URL the website can show.
+// Works with: normal image links, Google Drive share links, AppSheet file paths.
+function photoUrl_(v) {
+  v = String(v || '').trim();
+  if (!v) return '';
+  if (/^https?:\/\//i.test(v)) {
+    const driveId = /(drive|docs)\.google\.com/.test(v) &&
+      ((v.match(/\/d\/([\w-]{20,})/) || v.match(/[?&]id=([\w-]{20,})/) || [])[1]);
+    // Drive files must be shared "Anyone with the link" to show on the site
+    return driveId ? 'https://drive.google.com/thumbnail?id=' + driveId + '&sz=w600' : v;
+  }
+  if (APPSHEET_APP_NAME) {
+    return 'https://www.appsheet.com/template/gettablefileurl?appName=' + encodeURIComponent(APPSHEET_APP_NAME) +
+      '&tableName=Products&fileName=' + encodeURIComponent(v);
+  }
+  return '';
 }
 
 function json_(text) {

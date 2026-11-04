@@ -1,7 +1,7 @@
 // ===================== SETTINGS – edit these =====================
 export const CONFIG = {
   // Step 1 Apps Script Web app URL. Leave "" to preview with demo data.
-  API_URL: "https://script.google.com/macros/s/AKfycbzXJcq_TTgY1m5A4eG7C-7_EZFPazsF-J3N1ohzXYEGcYDNnGVA2fO2OAHkgBQNgOGvFw/exec",
+  API_URL: "https://script.google.com/macros/s/AKfycbwPc1y5puXthpBeCO5Q3k-8hbZA4zog29uNw_PuvgGHen_XZwi2hj8w1xiHUF2y4XCeMw/exec",
 
   // Admin numbers: country code + number, digits only
   ADMIN_WHATSAPP: "17867291938",

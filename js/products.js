@@ -31,9 +31,21 @@ export function controlHTML(p) {
   </div>`;
 }
 
+const BOTTLE = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M10 2h4v3h-4z"/><path d="M9 5h6v3l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V10l2-2z"/></svg>`;
+
+function thumbHTML(p) {
+  if (!p.photo) return `<div class="thumb ph" aria-hidden="true">${BOTTLE}</div>`;
+  return `<button class="thumb" data-photo="${esc(p.photo)}" data-name="${esc(p.name)}" aria-label="View photo of ${esc(p.name)}">
+    <img src="${esc(p.photo)}" alt="" loading="lazy" decoding="async"
+      onerror="this.parentNode.classList.add('ph');this.parentNode.disabled=true;this.outerHTML=BOTTLE_SVG">
+  </button>`;
+}
+window.BOTTLE_SVG = BOTTLE;
+
 function rowHTML(p) {
   return `
     <div class="row ${p.stock <= 0 ? "is-out" : ""}" id="r-${p.id}">
+      ${thumbHTML(p)}
       <div>
         <div class="name">${esc(p.name)}</div>
         <div class="meta">${p.price != null ? `<span class="price">${money(p.price)}</span>` : ""}${stockLabel(p)}</div>
@@ -58,7 +70,17 @@ export function renderList() {
     $("#list").innerHTML = `<div class="empty">No products match “${esc(state.filters.query)}”. Try a shorter word, like the brand name.</div>`;
     return;
   }
+  $("#list").classList.toggle("no-photos", !state.products.some((p) => p.photo));
   $("#list").innerHTML = shown.map(rowHTML).join("");
+}
+
+// Large photo view
+export function openPhoto(src, name) {
+  const d = $("#photoView");
+  $("#photoImg").src = src;
+  $("#photoImg").alt = name;
+  $("#photoName").textContent = name;
+  d.showModal();
 }
 
 function renderPager(pages) {

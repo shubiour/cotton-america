@@ -9,7 +9,7 @@ export const state = {
 };
 
 export function setProducts(list) {
-  state.products = list.map((p) => ({ ...p, g: genderOf(p.name), key: p.name.toLowerCase() }));
+  state.products = list.map((p) => ({ ...p, photo: /^https?:\/\//i.test(p.photo || "") ? p.photo : "", g: genderOf(p.name), key: p.name.toLowerCase() }));
   // Remove cart items that no longer exist and cap at current stock
   const byId = Object.fromEntries(state.products.map((p) => [p.id, p]));
   for (const id in state.cart) {
