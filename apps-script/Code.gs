@@ -123,3 +123,23 @@ function testProducts() {
   Logger.log(list.length + ' products');
   Logger.log(JSON.stringify(list.slice(0, 5), null, 2));
 }
+
+// Run this from the editor if stock looks wrong, then copy the log (View > Logs / Execution log)
+function debugStock() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ss.getSheets().forEach(sh => {
+    const cols = sh.getLastColumn();
+    Logger.log('TAB "' + sh.getName() + '" (' + (sh.getLastRow() - 1) + ' rows): ' +
+      (cols ? sh.getRange(1, 1, 1, cols).getValues()[0].join(' | ') : '(empty)'));
+  });
+  const invoices = readTable_(ss, 'Invoices');
+  const items = readTable_(ss, 'Invoice Items');
+  const statuses = {};
+  invoices.forEach(r => { const s = String(r['Status'] || '').trim() || '(blank)'; statuses[s] = (statuses[s] || 0) + 1; });
+  Logger.log('Invoice statuses: ' + JSON.stringify(statuses));
+  const ids = new Set(invoices.map(r => r['Invoice ID']));
+  Logger.log('Invoice Items: ' + items.length + ' rows, ' +
+    items.filter(r => ids.has(r['Invoice ID'])).length + ' linked to an invoice, ' +
+    items.filter(r => Number(r['Qty']) > 0).length + ' with a Qty');
+  Logger.log('Sample item row: ' + JSON.stringify(items[0]));
+}
