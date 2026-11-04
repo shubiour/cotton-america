@@ -49,7 +49,16 @@
 <div class="count" id="count"></div>
 
 <main>
-  <div class="list" id="list"><div class="loading">Loading products…</div></div>
+  <div class="list" id="list"><div class="loading" role="status">
+    <svg class="loader" viewBox="0 0 48 64" width="48" height="64" aria-hidden="true">
+      <defs><clipPath id="bottleClip"><path d="M16 18h16l4 6v32a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V24z"/></clipPath></defs>
+      <rect class="cap" x="19" y="3" width="10" height="9" rx="2"/>
+      <rect class="neck" x="21.5" y="12" width="5" height="6"/>
+      <g clip-path="url(#bottleClip)"><rect class="liquid" x="10" y="18" width="28" height="42"/></g>
+      <path class="glass" d="M16 18h16l4 6v32a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V24z"/>
+    </svg>
+    <div>Loading products…</div>
+  </div></div>
   <nav class="pager" id="pager" aria-label="Pages"></nav>
 </main>
 

@@ -106,6 +106,9 @@ export function refreshRow(id) {
   if (p && row) row.querySelector(".ctl").innerHTML = controlHTML(p);
 }
 
+const LOADING_HTML = document.querySelector("#list .loading")?.outerHTML || "";
+export function showLoading() { if (LOADING_HTML) $("#list").innerHTML = LOADING_HTML; }
+
 export function showLoadError(retry) {
   $("#list").innerHTML = `<div class="error">Products couldn’t load. Check your internet connection and try again.<br><button class="ghost" id="retryLoad">Try again</button></div>`;
   $("#retryLoad").addEventListener("click", retry);

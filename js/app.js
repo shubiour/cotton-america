@@ -2,12 +2,13 @@
 import { $ } from "./utils.js";
 import { state, setProducts } from "./state.js";
 import { fetchProducts } from "./api.js";
-import { renderList, refreshRow, showLoadError, goToPage, openPhoto } from "./products.js";
+import { renderList, refreshRow, showLoadError, showLoading, goToPage, openPhoto } from "./products.js";
 import { setQty, updateBar } from "./cart.js";
 import { initTheme } from "./theme.js";
 import { openSheet, closeSheet, renderSheet, sendOrder, isOpen } from "./checkout.js";
 
 async function load() {
+  showLoading();
   try {
     const { products, live } = await fetchProducts();
     setProducts(products);
