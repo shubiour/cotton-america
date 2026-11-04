@@ -16,5 +16,5 @@ export const CONFIG = {
   // Products shown per page
   PAGE_SIZE: 50,
 
-  BUSINESS: "Cotton America"
+  BUSINESS: "Cotton America Distribution LLC"
 };
