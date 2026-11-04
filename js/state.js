@@ -4,7 +4,8 @@ import { readStore, writeStore, genderOf } from "./utils.js";
 export const state = {
   products: [],
   cart: readStore("ca_cart", {}),   // { productId: qty }
-  filters: { gender: "all", inStockOnly: false, query: "" }
+  filters: { gender: "all", inStockOnly: false, query: "" },
+  page: 1
 };
 
 export function setProducts(list) {

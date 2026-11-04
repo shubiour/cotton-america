@@ -44,12 +44,35 @@ function rowHTML(p) {
 
 export function renderList() {
   const list = filtered();
-  $("#count").textContent = `${list.length} of ${state.products.length} products`;
+  const pages = Math.max(1, Math.ceil(list.length / CONFIG.PAGE_SIZE));
+  state.page = Math.min(Math.max(1, state.page), pages);
+  const start = (state.page - 1) * CONFIG.PAGE_SIZE;
+  const shown = list.slice(start, start + CONFIG.PAGE_SIZE);
+
+  $("#count").textContent = list.length > shown.length
+    ? `Showing ${start + 1}–${start + shown.length} of ${list.length} (${state.products.length} total)`
+    : `${list.length} of ${state.products.length} products`;
+  renderPager(pages);
+
   if (!list.length) {
     $("#list").innerHTML = `<div class="empty">No products match “${esc(state.filters.query)}”. Try a shorter word, like the brand name.</div>`;
     return;
   }
-  $("#list").innerHTML = list.map(rowHTML).join("");
+  $("#list").innerHTML = shown.map(rowHTML).join("");
+}
+
+function renderPager(pages) {
+  const p = state.page;
+  $("#pager").innerHTML = pages <= 1 ? "" : `
+    <button class="ghost" data-page="${p - 1}" ${p <= 1 ? "disabled" : ""}>‹ Prev</button>
+    <span>Page ${p} of ${pages}</span>
+    <button class="ghost" data-page="${p + 1}" ${p >= pages ? "disabled" : ""}>Next ›</button>`;
+}
+
+export function goToPage(n) {
+  state.page = n;
+  renderList();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 // Re-draw just one row's +/- control (fast, keeps scroll position)

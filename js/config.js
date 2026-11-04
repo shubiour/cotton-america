@@ -13,5 +13,8 @@ export const CONFIG = {
   // Show "Only X left" at or below this stock
   LOW_STOCK: 5,
 
+  // Products shown per page
+  PAGE_SIZE: 50,
+
   BUSINESS: "Cotton America"
 };

@@ -93,6 +93,11 @@ main{max-width:760px;margin:0 auto;padding:0 12px}
 }
 .add:disabled{border-color:var(--line);color:var(--muted);cursor:not-allowed}
 
+.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+.pager:empty{display:none}
+.pager button{color:var(--ink);font-weight:600}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+
 .empty,.loading,.error{padding:40px 20px;text-align:center;color:var(--muted)}
 .error button{margin-top:12px}
 

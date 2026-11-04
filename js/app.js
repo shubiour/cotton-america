@@ -2,7 +2,7 @@
 import { $ } from "./utils.js";
 import { state, setProducts } from "./state.js";
 import { fetchProducts } from "./api.js";
-import { renderList, refreshRow, showLoadError } from "./products.js";
+import { renderList, refreshRow, showLoadError, goToPage } from "./products.js";
 import { setQty, updateBar } from "./cart.js";
 import { openSheet, closeSheet, renderSheet, sendOrder, isOpen } from "./checkout.js";
 
@@ -29,13 +29,16 @@ document.addEventListener("click", (e) => {
   if (b.dataset.act === "add") setQty(id, 1);
   else if (b.dataset.act === "inc") setQty(id, q + 1);
   else if (b.dataset.act === "dec") setQty(id, q - 1);
+  else if (b.dataset.page) goToPage(Number(b.dataset.page));
   else if (b.dataset.g) {
     state.filters.gender = b.dataset.g;
+    state.page = 1;
     document.querySelectorAll("[data-g]").forEach((c) => c.setAttribute("aria-pressed", c === b));
     renderList();
   }
   else if (b.id === "instock") {
     state.filters.inStockOnly = !state.filters.inStockOnly;
+    state.page = 1;
     b.setAttribute("aria-pressed", state.filters.inStockOnly);
     renderList();
   }
@@ -61,7 +64,7 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheet
 let timer;
 $("#q").addEventListener("input", (e) => {
   clearTimeout(timer);
-  timer = setTimeout(() => { state.filters.query = e.target.value; renderList(); }, 120);
+  timer = setTimeout(() => { state.filters.query = e.target.value; state.page = 1; renderList(); }, 120);
 });
 
 load();
