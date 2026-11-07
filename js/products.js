@@ -36,7 +36,7 @@ const BOTTLE = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stro
 function thumbHTML(p) {
   if (!p.photo) return `<div class="thumb ph" aria-hidden="true">${BOTTLE}</div>`;
   return `<button class="thumb" data-photo="${esc(p.photo)}" data-pid="${p.id}" aria-label="View photo of ${esc(p.name)}">
-    <img src="${esc(p.photo)}" alt="" loading="lazy" decoding="async"
+    <img src="${esc(p.photo)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"
       onerror="this.parentNode.classList.add('ph');this.parentNode.disabled=true;this.outerHTML=BOTTLE_SVG">
   </button>`;
 }
